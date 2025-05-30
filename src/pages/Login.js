@@ -80,6 +80,12 @@ const Login = () => {
       const response = await axios.post(loginUrl, {
         username: formData.username.trim(),
         password: formData.password
+      }, {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        }
       });
 
       console.log('Response received:', {
