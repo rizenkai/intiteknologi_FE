@@ -1,5 +1,5 @@
 import React from 'react';
-import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider as MuiThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
@@ -19,7 +19,7 @@ import EditInput from './pages/EditInput';
 // Protected Route Component
 const PrivateRoute = ({ children }) => {
   const token = localStorage.getItem('token');
-  return token ? children : <Navigate to="/intidocs/login" />;
+  return token ? children : <Navigate to="/login" />;
 };
 
 // Admin Route Component
@@ -28,7 +28,7 @@ const AdminRoute = ({ children }) => {
   const userStr = localStorage.getItem('user');
   
   if (!token) {
-    return <Navigate to="/intidocs/login" />;
+    return <Navigate to="/login" />;
   }
   
   if (userStr) {
@@ -101,8 +101,10 @@ function App() {
           {/* Landing page tetap di root */}
           <Route path="/" element={<Landing />} />
           
+          {/* Login di root level untuk kemudahan akses */}
+          <Route path="/login" element={<Login />} />
+          
           {/* Semua rute aplikasi utama dengan prefix /intidocs */}
-          <Route path="/intidocs/login" element={<Login />} />
           <Route
             path="/intidocs/dashboard"
             element={
@@ -144,8 +146,7 @@ function App() {
             }
           />
           
-          {/* Redirect dari /login lama ke /intidocs/login untuk kompatibilitas */}
-          <Route path="/login" element={<Navigate to="/intidocs/login" />} />
+          {/* Tidak perlu redirect karena /login adalah rute utama sekarang */}
           </Routes>
         </Router>
       </ThemeWrapper>
