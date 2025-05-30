@@ -61,19 +61,39 @@ const Login = () => {
     try {
       setError('');
       
+      // Tampilkan informasi debugging
+      console.log('Login attempt with:', {
+        username: formData.username.trim(),
+        passwordLength: formData.password.length,
+        apiUrl: API_URL
+      });
+      
       if (!formData.username || !formData.password) {
         setError('Please enter both username and password');
         return;
       }
 
-      const response = await axios.post(`${API_URL}/api/auth/login`, {
+      // Tampilkan URL lengkap untuk debugging
+      const loginUrl = `${API_URL}/api/auth/login`;
+      console.log('Sending request to:', loginUrl);
+      
+      const response = await axios.post(loginUrl, {
         username: formData.username.trim(),
         password: formData.password
+      });
+
+      console.log('Response received:', {
+        status: response.status,
+        statusText: response.statusText,
+        headers: response.headers,
+        hasData: !!response.data,
+        hasToken: !!(response.data && response.data.token)
       });
 
       const { data } = response;
       
       if (data && data.token) {
+        console.log('Login successful, saving token and user data');
         localStorage.setItem('token', data.token);
         // Simpan data user lengkap termasuk fullname
         localStorage.setItem('user', JSON.stringify({
@@ -84,10 +104,20 @@ const Login = () => {
         }));
         navigate('/intidocs/dashboard');
       } else {
+        console.error('Invalid response structure:', data);
         setError('Invalid response from server');
       }
     } catch (error) {
-      console.error('Login error:', error.response || error);
+      console.error('Login error details:', {
+        message: error.message,
+        response: error.response ? {
+          status: error.response.status,
+          statusText: error.response.statusText,
+          data: error.response.data
+        } : 'No response',
+        request: error.request ? 'Request was made but no response received' : 'No request',
+        config: error.config
+      });
       setError(error.response?.data?.message || 'Failed to login');
     }
   };
