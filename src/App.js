@@ -19,7 +19,7 @@ import EditInput from './pages/EditInput';
 // Protected Route Component
 const PrivateRoute = ({ children }) => {
   const token = localStorage.getItem('token');
-  return token ? children : <Navigate to="/login" />;
+  return token ? children : <Navigate to="/intidocs/login" />;
 };
 
 // Admin Route Component
@@ -28,7 +28,7 @@ const AdminRoute = ({ children }) => {
   const userStr = localStorage.getItem('user');
   
   if (!token) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/intidocs/login" />;
   }
   
   if (userStr) {
@@ -101,8 +101,14 @@ function App() {
           {/* Landing page tetap di root */}
           <Route path="/" element={<Landing />} />
           
-          {/* Login di root level untuk kemudahan akses */}
-          <Route path="/login" element={<Login />} />
+          {/* Redirect /intidocs ke /intidocs/login */}
+          <Route path="/intidocs" element={<Navigate to="/intidocs/login" />} />
+          
+          {/* Login dipindahkan ke /intidocs/login */}
+          <Route path="/intidocs/login" element={<Login />} />
+          
+          {/* Redirect old login path to new one */}
+          <Route path="/login" element={<Navigate to="/intidocs/login" />} />
           
           {/* Semua rute aplikasi utama dengan prefix /intidocs */}
           <Route

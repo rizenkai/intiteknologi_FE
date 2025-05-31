@@ -171,7 +171,7 @@ const Landing = () => {
               <Button sx={{ color: themeColors.text, fontWeight: 600 }} onClick={() => scrollToSection(contactRef)}>Kontak</Button>
               <Button 
                 variant="contained" 
-                onClick={() => navigate('/login')} 
+                onClick={() => navigate('/intidocs/login')} 
                 sx={{ 
                   bgcolor: themeColors.buttonBg,
                   color: themeColors.buttonText,
@@ -237,7 +237,7 @@ const Landing = () => {
             <ListItemText primary="Kontak" sx={{ color: themeColors.text }} />
           </ListItem>
           <ListItem button onClick={() => {
-            navigate('/login');
+            navigate('/intidocs/login');
             handleCloseMobileMenu();
           }}>
             <ListItemText 
