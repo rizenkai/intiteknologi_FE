@@ -2,18 +2,11 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import API_URL from '../utils/api';
 import { useTheme } from '../context/ThemeContext';
-import { useTheme as useMuiTheme } from '@mui/material';
-import { getTheme, getStatusColor, getStatusTextColor } from '../theme/lightDarkTheme';
+import { getTheme } from '../theme/lightDarkTheme';
 import {
   Box,
   Container,
   Typography,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   Paper,
   Button,
   TextField,
@@ -27,14 +20,11 @@ import {
   MenuItem,
   CircularProgress,
   Alert,
-  IconButton,
   Grid,
   Pagination,
-  Stack,
 } from '@mui/material';
 import { 
   CloudDownload as DownloadIcon, 
-  Add as AddIcon,
   Search as SearchIcon,
   CloudUpload as UploadIcon
 } from '@mui/icons-material';
@@ -44,7 +34,7 @@ import { format } from 'date-fns';
 const Documents = () => {
   // Theme context
   const { isDarkMode } = useTheme();
-  const muiTheme = useMuiTheme();
+  // eslint-disable-next-line no-unused-vars
   const theme = getTheme(isDarkMode);
   
   // State for documents
@@ -59,7 +49,8 @@ const Documents = () => {
     status: 'All',
     dateRange: 'All'
   });
-  const [showAdvancedFilter, setShowAdvancedFilter] = useState(false);
+  // eslint-disable-next-line no-unused-vars
+  const [showAdvancedFilter] = useState(false);
   
   // State for pagination
   const [page, setPage] = useState(0);
@@ -68,12 +59,13 @@ const Documents = () => {
   
   // State for upload dialog
   const [uploadDialog, setUploadDialog] = useState(false);
-  const [openUploadDialog, setOpenUploadDialog] = useState(false);
+  // eslint-disable-next-line no-unused-vars
+  const [openUploadDialog] = useState(false);
   const [uploadLoading, setUploadLoading] = useState(false);
   const [uploadError, setUploadError] = useState('');
   const [selectedDocument, setSelectedDocument] = useState(null); // For updating existing document
   const [selectedFile, setSelectedFile] = useState(null);
-  const [loadingDownload, setLoadingDownload] = useState({});
+  const [loadingDownload] = useState({});
   const [documentData, setDocumentData] = useState({
     title: '',
     description: '',

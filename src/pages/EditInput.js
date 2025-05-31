@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import API_URL from '../utils/api';
 import { useTheme } from '../context/ThemeContext';
@@ -10,7 +10,7 @@ import {
   Button,
   TextField,
   FormControl,
-  FormLabel,
+  // FormLabel,
   RadioGroup,
   FormControlLabel,
   Radio,
@@ -20,7 +20,7 @@ import {
   ListItem,
   ListItemText,
   IconButton,
-  Divider,
+  // Divider,
   Alert,
   Snackbar,
   CircularProgress,
@@ -29,7 +29,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Grid,
+  // Grid,
   Tooltip
 } from '@mui/material';
 import { Add as AddIcon, Delete as DeleteIcon, HelpOutline as HelpOutlineIcon } from '@mui/icons-material';
@@ -60,20 +60,8 @@ const EditInput = () => {
   const [deleteDialog, setDeleteDialog] = useState(false);
   const [valueToDelete, setValueToDelete] = useState('');
   
-  // Effect untuk mengambil data nilai yang sudah ada saat tipe pengujian dan kategori berubah
-  useEffect(() => {
-    if (testType && category) {
-      fetchExistingValues();
-    }
-  }, [testType, category]);
-  
-  // Fungsi untuk mengecek apakah tombol Add dapat diklik
-  const canAdd = () => {
-    return !loading && newValue.trim() !== '';
-  };
-  
   // Fungsi untuk mengambil data nilai yang sudah ada
-  const fetchExistingValues = async () => {
+  const fetchExistingValues = useCallback(async () => {
     setLoading(true);
     try {
       // Buat array untuk nilai default
@@ -133,39 +121,21 @@ const EditInput = () => {
       setError('Failed to fetch existing values');
       
       // Jika terjadi error, gunakan data default saja
-      const defaultValues = [];
-      
-      if (category === 'mutuBahan') {
-        if (testType === 'Besi') {
-          defaultValues.push({ _id: 'default-1', value: 'T 280' });
-          defaultValues.push({ _id: 'default-2', value: 'T 420' });
-        } else if (testType === 'Beton') {
-          defaultValues.push({ _id: 'default-3', value: 'K 225' });
-          defaultValues.push({ _id: 'default-4', value: 'K 250' });
-          defaultValues.push({ _id: 'default-5', value: 'K 300' });
-          defaultValues.push({ _id: 'default-6', value: 'K 350' });
-          defaultValues.push({ _id: 'default-7', value: 'K 400' });
-          defaultValues.push({ _id: 'default-8', value: 'K 450' });
-          defaultValues.push({ _id: 'default-9', value: 'K 500' });
-          defaultValues.push({ _id: 'default-10', value: 'K 600' });
-        }
-      } else if (category === 'tipeBahan') {
-        if (testType === 'Besi') {
-          defaultValues.push({ _id: 'default-11', value: 'BJTS (Ulir)' });
-          defaultValues.push({ _id: 'default-12', value: 'BJTP (Polos)' });
-        } else if (testType === 'Beton') {
-          defaultValues.push({ _id: 'default-13', value: 'KUBUS' });
-          defaultValues.push({ _id: 'default-14', value: 'SILINDER' });
-          defaultValues.push({ _id: 'default-15', value: 'BALOK' });
-          defaultValues.push({ _id: 'default-16', value: 'PAVING' });
-          defaultValues.push({ _id: 'default-17', value: 'SCOUP' });
-        }
-      }
-      
-      setExistingValues(defaultValues);
+      setExistingValues([]);
     } finally {
       setLoading(false);
     }
+  }, [category, testType, setError, setLoading, setExistingValues]);
+  
+  useEffect(() => {
+    if (testType && category) {
+      fetchExistingValues();
+    }
+  }, [testType, category, fetchExistingValues]);
+  
+  // Fungsi untuk mengecek apakah tombol Add dapat diklik
+  const canAdd = () => {
+    return !loading && newValue.trim() !== '';
   };
   
   // Fungsi untuk menambahkan nilai baru
