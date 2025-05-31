@@ -13,6 +13,7 @@ import {
   IconButton,
   Container,
   Paper,
+  CircularProgress,
 } from '@mui/material';
 import { useTheme as useAppTheme } from '../context/ThemeContext';
 
@@ -25,6 +26,7 @@ const Login = () => {
   });
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   
   // Warna tema konsisten dengan landing page
   const themeColors = {
@@ -60,6 +62,7 @@ const Login = () => {
     e.preventDefault();
     try {
       setError('');
+      setLoading(true);
       
       // Tampilkan informasi debugging
       console.log('Login attempt with:', {
@@ -113,6 +116,7 @@ const Login = () => {
         console.error('Invalid response structure:', data);
         setError('Invalid response from server');
       }
+      setLoading(false);
     } catch (error) {
       console.error('Login error details:', {
         message: error.message,
@@ -125,6 +129,7 @@ const Login = () => {
         config: error.config
       });
       setError(error.response?.data?.message || 'Failed to login');
+      setLoading(false);
     }
   };
 
@@ -319,19 +324,33 @@ const Login = () => {
               type="submit"
               fullWidth
               variant="contained"
+              disabled={loading}
               sx={{
                 mt: 2,
                 py: 1.5,
-                bgcolor: themeColors.buttonBg,
+                bgcolor: loading ? (isDarkMode ? 'rgba(65,227,255,0.5)' : 'rgba(25,118,210,0.5)') : themeColors.buttonBg,
                 color: themeColors.buttonText,
                 fontWeight: 600,
                 borderRadius: 2,
                 '&:hover': {
-                  bgcolor: isDarkMode ? '#1ec6e6' : '#1565c0',
+                  bgcolor: loading ? (isDarkMode ? 'rgba(65,227,255,0.5)' : 'rgba(25,118,210,0.5)') : (isDarkMode ? '#1ec6e6' : '#1565c0'),
                 },
+                position: 'relative',
               }}
             >
-              Masuk
+              {loading ? (
+                <>
+                  <CircularProgress 
+                    size={24} 
+                    sx={{ 
+                      color: isDarkMode ? '#090d1f' : '#ffffff',
+                      position: 'absolute',
+                      left: 'calc(50% - 12px)',
+                    }} 
+                  />
+                  <span style={{ visibility: 'hidden' }}>Masuk</span>
+                </>
+              ) : 'Masuk'}
             </Button>
           </Box>
         </Paper>
