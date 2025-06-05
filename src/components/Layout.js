@@ -161,7 +161,7 @@ const Layout = ({ children }) => {
         }}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <img src="/logo.png" alt="Inti Teknologi Logo" style={{ height: '32px', marginRight: '10px' }} />
-            <Typography variant="h6" sx={{ color: muiTheme.palette.primary.main, fontWeight: 700, fontSize: 18 }}>Inti Teknologi</Typography>
+            <Typography variant="h6" sx={{ color: muiTheme.palette.primary.main, fontWeight: 700, fontSize: 18 }}>ITI Utama</Typography>
           </Box>
           <IconButton
             onClick={() => setSidebarOpen(false)}
